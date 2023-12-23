@@ -1,6 +1,7 @@
 package gravity_changer.mixin;
 
 
+import com.llamalad7.mixinextras.injector.ModifyExpressionValue;
 import gravity_changer.api.GravityChangerAPI;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EntityType;
@@ -8,6 +9,7 @@ import net.minecraft.world.entity.projectile.FishingHook;
 import net.minecraft.world.level.Level;
 
 import org.spongepowered.asm.mixin.Mixin;
+import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Constant;
 import org.spongepowered.asm.mixin.injection.ModifyConstant;
 
@@ -58,7 +60,7 @@ public abstract class FishinghookMixin extends Entity {
 //        return RotationUtil.vecPlayerToWorld(vec3d, gravityDirection);
 //    }
     
-    @ModifyConstant(method = "Lnet/minecraft/world/entity/projectile/FishingHook;tick()V", constant = @Constant(doubleValue = -0.03))
+    @ModifyExpressionValue(method = "tick()V", at = @At(value = "CONSTANT", args = {"doubleValue=-0.03"}))
     private double multiplyGravity(double constant) {
         return constant * GravityChangerAPI.getGravityStrength(this);
     }

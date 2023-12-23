@@ -12,7 +12,6 @@ import net.minecraft.util.Mth;
 import net.minecraft.util.RandomSource;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EntityDimensions;
-import net.minecraft.world.entity.Pose;
 import net.minecraft.world.entity.projectile.Projectile;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.RenderShape;
@@ -325,7 +324,7 @@ public abstract class EntityMixin {
     // transform the result to world coordinate
     // the input to Entity.collideBoundingBox will be in local coord
     @Inject(
-        method = "Lnet/minecraft/world/entity/Entity;collide(Lnet/minecraft/world/phys/Vec3;)Lnet/minecraft/world/phys/Vec3;",
+        method = "collide(Lnet/minecraft/world/phys/Vec3;)Lnet/minecraft/world/phys/Vec3;",
         at = @At("RETURN"),
         cancellable = true
     )
@@ -370,7 +369,7 @@ public abstract class EntityMixin {
     
     // Entity.collideBoundingBox is inputed with local coord, transform it to world coord
     @ModifyVariable(
-        method = "Lnet/minecraft/world/entity/Entity;collideBoundingBox(Lnet/minecraft/world/entity/Entity;Lnet/minecraft/world/phys/Vec3;Lnet/minecraft/world/phys/AABB;Lnet/minecraft/world/level/Level;Ljava/util/List;)Lnet/minecraft/world/phys/Vec3;",
+        method = "collideBoundingBox(Lnet/minecraft/world/entity/Entity;Lnet/minecraft/world/phys/Vec3;Lnet/minecraft/world/phys/AABB;Lnet/minecraft/world/level/Level;Ljava/util/List;)Lnet/minecraft/world/phys/Vec3;",
         at = @At("HEAD"),
         ordinal = 0,
         argsOnly = true
@@ -390,7 +389,7 @@ public abstract class EntityMixin {
     
     // transform back to local coord
     @Inject(
-        method = "Lnet/minecraft/world/entity/Entity;collideBoundingBox(Lnet/minecraft/world/entity/Entity;Lnet/minecraft/world/phys/Vec3;Lnet/minecraft/world/phys/AABB;Lnet/minecraft/world/level/Level;Ljava/util/List;)Lnet/minecraft/world/phys/Vec3;",
+        method = "collideBoundingBox(Lnet/minecraft/world/entity/Entity;Lnet/minecraft/world/phys/Vec3;Lnet/minecraft/world/phys/AABB;Lnet/minecraft/world/level/Level;Ljava/util/List;)Lnet/minecraft/world/phys/Vec3;",
         at = @At("RETURN"),
         cancellable = true
     )
@@ -404,7 +403,7 @@ public abstract class EntityMixin {
     }
     
     @Redirect(
-        method = "Lnet/minecraft/world/entity/Entity;collideBoundingBox(Lnet/minecraft/world/entity/Entity;Lnet/minecraft/world/phys/Vec3;Lnet/minecraft/world/phys/AABB;Lnet/minecraft/world/level/Level;Ljava/util/List;)Lnet/minecraft/world/phys/Vec3;",
+        method = "collideBoundingBox(Lnet/minecraft/world/entity/Entity;Lnet/minecraft/world/phys/Vec3;Lnet/minecraft/world/phys/AABB;Lnet/minecraft/world/level/Level;Ljava/util/List;)Lnet/minecraft/world/phys/Vec3;",
         at = @At(
             value = "INVOKE",
             target = "Lnet/minecraft/world/entity/Entity;collideWithShapes(Lnet/minecraft/world/phys/Vec3;Lnet/minecraft/world/phys/AABB;Ljava/util/List;)Lnet/minecraft/world/phys/Vec3;",
@@ -468,6 +467,36 @@ public abstract class EntityMixin {
         args.set(2, rotate.y);
         args.set(3, rotate.z);
     }
+
+    /*@ModifyArgs(
+        method = "onAboveBubbleCol",
+        at = @At(
+            value = "INVOKE",
+            target = "Lnet/minecraft/world/entity/Entity;setDeltaMovement(DDD)V"
+        )
+    )
+    private void adjustMovementForAboveBubCol(Args args, boolean downwards) {
+        Vec3 rotate = new Vec3(args.get(0), args.get(1), args.get(2));
+        rotate = RotationUtil.vecWorldToPlayer(rotate, GravityChangerAPI.getGravityDirection((Entity) (Object) this));
+        args.set(0, rotate.x);
+        args.set(1, rotate.y);
+        args.set(2, rotate.z);
+    }*/
+
+    @ModifyArgs(
+        method = "onInsideBubbleColumn",
+        at = @At(
+            value = "INVOKE",
+            target = "Lnet/minecraft/world/entity/Entity;setDeltaMovement(DDD)V"
+        )
+    )
+    private void adjustMovementForInBubCol(Args args, boolean downwards) {
+        Vec3 rotate = new Vec3(args.get(0), args.get(1), args.get(2));
+        rotate = RotationUtil.vecWorldToPlayer(rotate, GravityChangerAPI.getGravityDirection((Entity) (Object) this));
+        args.set(0, rotate.x);
+        args.set(1, rotate.y);
+        args.set(2, rotate.z);
+    }
     
     @ModifyArg(
         method = "getDirection",
@@ -486,7 +515,7 @@ public abstract class EntityMixin {
     }
     
     @Inject(
-        method = "Lnet/minecraft/world/entity/Entity;spawnSprintParticle()V",
+        method = "spawnSprintParticle()V",
         at = @At("HEAD"),
         cancellable = true
     )

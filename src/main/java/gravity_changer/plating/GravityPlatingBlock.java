@@ -1,6 +1,7 @@
 package gravity_changer.plating;
 
 import com.google.common.collect.ImmutableMap;
+import com.mojang.serialization.MapCodec;
 import net.fabricmc.fabric.api.object.builder.v1.block.FabricBlockSettings;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
@@ -27,7 +28,6 @@ import net.minecraft.world.level.block.ShulkerBoxBlock;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.entity.BlockEntityTicker;
 import net.minecraft.world.level.block.entity.BlockEntityType;
-import net.minecraft.world.level.block.entity.ShulkerBoxBlockEntity;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.state.StateDefinition;
 import net.minecraft.world.level.block.state.properties.BlockStateProperties;
@@ -93,7 +93,12 @@ public class GravityPlatingBlock extends BaseEntityBlock {
                     .collect(Collectors.toMap(Function.identity(), GravityPlatingBlock::getShapeForState))
             );
     }
-    
+
+    @Override
+    protected MapCodec<? extends BaseEntityBlock> codec() {
+        return null;
+    }
+
     private static VoxelShape getShapeForState(BlockState state) {
         VoxelShape voxelShape = Shapes.empty();
         if (state.getValue(UP)) {
@@ -242,7 +247,8 @@ public class GravityPlatingBlock extends BaseEntityBlock {
     
     // Note: the direction is gravity field direction. the facing is the opposite
     public static boolean hasDir(BlockState blockState, Direction dir) {
-        return blockState.getValue(directionToProperty(dir));
+        var property = directionToProperty(dir);
+        return blockState.hasProperty(property) && blockState.getValue(directionToProperty(dir));
     }
     
     public static ArrayList<Direction> getDirections(BlockState blockState) {
@@ -285,7 +291,7 @@ public class GravityPlatingBlock extends BaseEntityBlock {
      * Make it drop in creative mode.
      */
     @Override
-    public void playerWillDestroy(Level level, BlockPos pos, BlockState state, Player player) {
+    public BlockState playerWillDestroy(Level level, BlockPos pos, BlockState state, Player player) {
         BlockEntity blockEntity = level.getBlockEntity(pos);
         if (blockEntity instanceof GravityPlatingBlockEntity be && !level.isClientSide && player.isCreative()) {
             List<ItemStack> drops = be.getDrops();
@@ -301,7 +307,7 @@ public class GravityPlatingBlock extends BaseEntityBlock {
             }
         }
         
-        super.playerWillDestroy(level, pos, state, player);
+        return super.playerWillDestroy(level, pos, state, player);
     }
     
     @Override
