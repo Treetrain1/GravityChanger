@@ -13,7 +13,7 @@ public class GravityChangerConfig implements ConfigData {
     @ConfigEntry.Gui.Tooltip(count = 2)
     public int rotationTime = 500;
     @ConfigEntry.Gui.Tooltip(count = 2)
-    public boolean worldVelocity = false;
+    public boolean worldVelocity = true;
     
     public double gravityStrengthMultiplier = 1.0;
     @ConfigEntry.Gui.Tooltip(count = 2)

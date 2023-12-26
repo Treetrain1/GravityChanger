@@ -10,13 +10,13 @@ public record RotationParameters(
     int rotationTimeMS
 ) {
     public static RotationParameters defaultParam = new RotationParameters(
-        true, true, 500
+        false, false, 500
     );
     
     public static void updateDefault() {
         defaultParam = new RotationParameters(
             !GravityChangerMod.config.worldVelocity,
-            true,
+            false,
             GravityChangerMod.config.rotationTime
         );
     }
