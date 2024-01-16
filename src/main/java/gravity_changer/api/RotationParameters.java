@@ -10,7 +10,7 @@ public record RotationParameters(
     int rotationTimeMS
 ) {
     public static RotationParameters defaultParam = new RotationParameters(
-        false, false, 500
+        false, false, 0
     );
     
     public static void updateDefault() {

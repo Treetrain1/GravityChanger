@@ -11,7 +11,7 @@ public class GravityChangerConfig implements ConfigData {
 //    @ConfigEntry.Gui.Tooltip(count = 2)
 //    public static boolean keepWorldLook = false;
     @ConfigEntry.Gui.Tooltip(count = 2)
-    public int rotationTime = 500;
+    public int rotationTime = 0;
     @ConfigEntry.Gui.Tooltip(count = 2)
     public boolean worldVelocity = true;
     
@@ -19,9 +19,9 @@ public class GravityChangerConfig implements ConfigData {
     @ConfigEntry.Gui.Tooltip(count = 2)
     public boolean resetGravityOnRespawn = true;
     @ConfigEntry.Gui.Tooltip(count = 2)
-    public boolean voidDamageAboveWorld = true;
+    public boolean voidDamageAboveWorld = false;
     @ConfigEntry.Gui.Tooltip(count = 2)
-    public boolean voidDamageOnHorizontalFallTooFar = true;
+    public boolean voidDamageOnHorizontalFallTooFar = false;
     
     public boolean autoJumpOnGravityPlateInnerCorner = true;
     public boolean adjustPositionAfterChangingGravity = true;

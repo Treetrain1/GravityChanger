@@ -26,11 +26,6 @@ public class RotationAnimation {
         long durationTimeMs, Entity entity, long timeMs,
         boolean rotateView, Vec3 relativeRotationCenter
     ) {
-        if (durationTimeMs == 0) {
-            inAnimation = false;
-            return;
-        }
-        
         Validate.notNull(entity);
         
         Vec3 newLookingDirection = getNewLookingDirection(newGravity, prevGravity, entity, rotateView);
@@ -61,6 +56,10 @@ public class RotationAnimation {
             livingEntity.yBodyRotO += deltaYaw;
             livingEntity.yHeadRot += deltaYaw;
             livingEntity.yHeadRotO += deltaYaw;
+        }
+        if (durationTimeMs == 0) {
+            inAnimation = false;
+            return;
         }
         
         Quaternionf newViewRotation = QuaternionUtil.getViewRotation(entity.getXRot(), entity.getYRot());
