@@ -18,8 +18,8 @@ import org.spongepowered.asm.mixin.injection.Redirect;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
 @Mixin(LocalPlayer.class)
-public abstract class LocalPlayerEntityMixin extends AbstractClientPlayer {
-    public LocalPlayerEntityMixin(ClientLevel world, GameProfile profile) {
+public abstract class LocalPlayerMixin extends AbstractClientPlayer {
+    public LocalPlayerMixin(ClientLevel world, GameProfile profile) {
         super(world, profile);
     }
     

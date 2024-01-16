@@ -56,7 +56,7 @@
   "client": [
     "client.BiomeAmbientSoundHandlerMixin",
     "client.CameraMixin",
-    "client.LocalPlayerEntityMixin",
+    "client.LocalPlayerMixin",
     "client.ClientPacketListenerMixin",
     "client.EntityRenderDispatcherMixin",
     "client.EntityRenderMixin",
