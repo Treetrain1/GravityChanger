@@ -24,9 +24,9 @@ public abstract class GameRendererMixin {
     @Shadow
     @Final
     private Camera mainCamera;
-    
+
     @Inject(
-        method = "Lnet/minecraft/client/renderer/GameRenderer;renderLevel(FJLcom/mojang/blaze3d/vertex/PoseStack;)V",
+        method = "renderLevel(FJLcom/mojang/blaze3d/vertex/PoseStack;)V",
         at = @At(
             value = "INVOKE",
             target = "Lcom/mojang/blaze3d/vertex/PoseStack;mulPose(Lorg/joml/Quaternionf;)V",
@@ -49,8 +49,9 @@ public abstract class GameRendererMixin {
                 // make sure that frustum culling updates when running rotation animation
                 Minecraft.getInstance().levelRenderer.needsUpdate();
             }
-            
-            matrix.mulPose(currentGravityRotation);
+
+            var vertRotLock = new Quaternionf(currentGravityRotation.x, currentGravityRotation.y, 0, -1);
+            matrix.mulPose(vertRotLock);
         }
     }
 }

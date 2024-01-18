@@ -105,6 +105,7 @@ public abstract class CameraMixin {
         )
     )
     private void inject_setRotation(CallbackInfo ci) {
+        if (true) return;
         if (this.entity != null) {
             Direction gravityDirection = GravityChangerAPI.getGravityDirection(this.entity);
             RotationAnimation animation = GravityChangerAPI.getRotationAnimation(entity);
